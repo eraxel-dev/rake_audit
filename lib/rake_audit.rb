@@ -66,6 +66,15 @@ module RakeAudit
   end
 end
 
+# Load the Rails integration only when Rails is present. The Engine exposes the
+# gem's +app/+ models to the host application and the Railtie installs the task
+# patch after initialization; both require Rails and are skipped otherwise so
+# the gem remains usable in a plain Ruby or standalone Rake setup.
+if defined?(Rails::Engine)
+  require_relative 'rake_audit/rails/engine'
+  require_relative 'rake_audit/rails/railtie'
+end
+
 # Auto-install the patch when Rake is already loaded. When Rake loads later
 # (e.g. a Railtie or the application's Rakefile), callers can invoke
 # RakeAudit.install! explicitly.
