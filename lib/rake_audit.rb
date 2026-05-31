@@ -59,7 +59,7 @@ module RakeAudit
     def install!
       return false unless defined?(Rake::Task)
 
-      Rake::Task.prepend(TaskPatch) unless Rake::Task.ancestors.include?(TaskPatch)
+      Rake::Task.prepend(TaskPatch)
       true
     end
     # rubocop:enable Naming/PredicateMethod

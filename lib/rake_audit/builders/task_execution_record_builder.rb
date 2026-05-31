@@ -58,8 +58,6 @@ module RakeAudit
       def normalize_arguments(args)
         if args.respond_to?(:to_hash)
           args.to_hash
-        elsif args.is_a?(Hash)
-          args
         else
           {}
         end
