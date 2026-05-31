@@ -24,6 +24,7 @@ module RakeAudit
       # @param exception [Exception, nil] the raised exception, if the task failed.
       # @param config [RakeAudit::Configuration] configuration controlling capture.
       # @return [RakeAudit::TaskExecutionRecord]
+      # rubocop:disable Metrics/ParameterLists, Metrics/CyclomaticComplexity
       def build(task:, args:, started_at:, finished_at:, exception:, config:)
         TaskExecutionRecord.new(
           task_name: task_name_for(task),
@@ -40,6 +41,7 @@ module RakeAudit
           rails_env: config.capture_rails_env ? rails_env : nil
         )
       end
+      # rubocop:enable Metrics/ParameterLists, Metrics/CyclomaticComplexity
 
       # @api private
       def task_name_for(task)

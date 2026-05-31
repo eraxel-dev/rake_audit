@@ -64,7 +64,9 @@ RSpec.describe RakeAudit do
     end
 
     it 'returns the configuration' do
+      # rubocop:disable Lint/EmptyBlock
       expect(RakeAudit.configure { |_c| }).to be(RakeAudit.config)
+      # rubocop:enable Lint/EmptyBlock
     end
 
     it 'memoizes the configuration across calls' do

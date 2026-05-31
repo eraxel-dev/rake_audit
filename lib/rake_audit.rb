@@ -55,12 +55,14 @@ module RakeAudit
     # is safe to call multiple times.
     #
     # @return [Boolean] true if Rake was present and the patch is installed.
+    # rubocop:disable Naming/PredicateMethod
     def install!
       return false unless defined?(Rake::Task)
 
       Rake::Task.prepend(TaskPatch) unless Rake::Task.ancestors.include?(TaskPatch)
       true
     end
+    # rubocop:enable Naming/PredicateMethod
   end
 end
 
