@@ -2,6 +2,9 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 3.0
   SuggestExtensions: false
+  Exclude:
+    # Generator templates contain ERB and are not parseable as plain Ruby.
+    - "lib/generators/**/templates/**/*"
 
 # Specs are intentionally verbose and example-driven.
 Metrics/BlockLength:

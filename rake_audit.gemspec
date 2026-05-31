@@ -21,7 +21,10 @@ Gem::Specification.new do |spec|
   spec.metadata['source_code_uri'] = spec.homepage
   spec.metadata['rubygems_mfa_required'] = 'true'
 
-  spec.files = Dir.glob('lib/**/*.rb') + %w[README.md LICENSE]
+  spec.files = Dir.glob('lib/**/*') +
+               Dir.glob('app/**/*.rb') +
+               Dir.glob('db/**/*.rb') +
+               %w[README.md LICENSE]
   spec.require_paths = ['lib']
 
   spec.add_dependency 'rake', '>= 13.0', '< 14.0'

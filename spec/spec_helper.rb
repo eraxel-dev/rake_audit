@@ -3,6 +3,14 @@
 require 'rake'
 require 'rake_audit'
 
+# Load ActiveRecord-backed test support when the driver is available. This lets
+# the model/migration specs run without forcing a Rails dependency on the gem.
+begin
+  require_relative 'support/active_record'
+rescue LoadError
+  warn 'ActiveRecord/sqlite3 not available; skipping AR-backed specs.'
+end
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
