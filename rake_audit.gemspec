@@ -22,10 +22,17 @@ Gem::Specification.new do |spec|
   spec.metadata['rubygems_mfa_required'] = 'true'
 
   spec.files = Dir.glob('lib/**/*') +
-               Dir.glob('app/**/*.rb') +
+               Dir.glob('app/**/*') +
+               Dir.glob('config/**/*.rb') +
                Dir.glob('db/**/*.rb') +
                %w[README.md LICENSE]
   spec.require_paths = ['lib']
 
+  # Pagination for the Web UI execution list: ExecutionsController#index calls
+  # +.page+ and the list view uses the +paginate+ helper, both from Kaminari.
+  # Kaminari only activates its ActiveRecord/ActionView integrations when those
+  # libraries are loaded, so it stays inert in a plain-Ruby (no Rails) setup —
+  # preserving the gem's "loads fine without Rails" guarantee.
+  spec.add_dependency 'kaminari', '>= 1.2', '< 2.0'
   spec.add_dependency 'rake', '>= 13.0', '< 14.0'
 end
