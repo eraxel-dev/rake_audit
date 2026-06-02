@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RakeAudit</title>
+    <style>
+      :root { color-scheme: light dark; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.5;
+        color: #1f2933;
+        background: #f5f7fa;
+      }
+      header.rake-audit-bar {
+        background: #1f2933;
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+      header.rake-audit-bar a { color: #cbd2d9; text-decoration: none; font-weight: 600; }
+      header.rake-audit-bar a:hover { color: #fff; }
+      header.rake-audit-bar .brand { color: #fff; font-size: 1.1rem; }
+      main { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
+      h1 { font-size: 1.4rem; margin-top: 0; }
+      table { width: 100%; border-collapse: collapse; background: #fff; }
+      th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid #e4e7eb; }
+      th { background: #f0f4f8; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; }
+      .cards { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+      .card {
+        background: #fff;
+        border: 1px solid #e4e7eb;
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        min-width: 150px;
+        flex: 1;
+      }
+      .card .label { font-size: 0.75rem; text-transform: uppercase; color: #7b8794; }
+      .card .value { font-size: 1.6rem; font-weight: 700; }
+      form.filters { background: #fff; border: 1px solid #e4e7eb; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }
+      form.filters .row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-end; }
+      form.filters label { display: flex; flex-direction: column; font-size: 0.75rem; color: #52606d; gap: 0.25rem; }
+      form.filters input, form.filters select { padding: 0.35rem 0.5rem; border: 1px solid #cbd2d9; border-radius: 4px; }
+      form.filters button { padding: 0.45rem 1rem; border: 0; border-radius: 4px; background: #2563eb; color: #fff; cursor: pointer; }
+      .status-success { color: #057a55; font-weight: 600; }
+      .status-failure { color: #c81e1e; font-weight: 600; }
+      .section { background: #fff; border: 1px solid #e4e7eb; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+      .section h2 { font-size: 1rem; margin-top: 0; }
+      dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1rem; margin: 0; }
+      dt { font-weight: 600; color: #52606d; }
+      pre { background: #f0f4f8; padding: 0.75rem; border-radius: 4px; overflow-x: auto; margin: 0; }
+      .pagination { margin-top: 1rem; }
+      .pagination a, .pagination span { padding: 0.25rem 0.5rem; }
+    </style>
+  </head>
+  <body>
+    <header class="rake-audit-bar">
+      <span class="brand">RakeAudit</span>
+      <%= link_to "Executions", executions_path %>
+      <%= link_to "Dashboard", dashboard_path %>
+    </header>
+    <main>
+      <%= yield %>
+    </main>
+  </body>
+</html>

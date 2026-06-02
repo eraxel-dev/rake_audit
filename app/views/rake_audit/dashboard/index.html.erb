@@ -1,0 +1,48 @@
+<h1>Dashboard</h1>
+
+<section class="cards">
+  <div class="card">
+    <div class="label">Total</div>
+    <div class="value"><%= @total %></div>
+  </div>
+  <div class="card">
+    <div class="label">Success</div>
+    <div class="value"><%= @success_count %></div>
+  </div>
+  <div class="card">
+    <div class="label">Failure</div>
+    <div class="value"><%= @failure_count %></div>
+  </div>
+  <div class="card">
+    <div class="label">Failure Rate</div>
+    <div class="value"><%= format("%.1f%%", @failure_rate) %></div>
+  </div>
+  <div class="card">
+    <div class="label">Avg Duration (ms)</div>
+    <div class="value"><%= @average_duration_ms ? format("%.1f", @average_duration_ms) : "—" %></div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Top 10 Failed Tasks</h2>
+  <% if @top_failed_tasks.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Task Name</th>
+          <th>Failure Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @top_failed_tasks.each do |task_name, failure_count| %>
+          <tr>
+            <td><%= task_name %></td>
+            <td><%= failure_count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No failed tasks recorded.</p>
+  <% end %>
+</section>

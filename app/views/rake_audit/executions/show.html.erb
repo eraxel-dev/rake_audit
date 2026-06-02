@@ -1,0 +1,46 @@
+<h1>Execution #<%= @execution.id %></h1>
+
+<p><%= link_to "← Back to executions", executions_path %></p>
+
+<section class="section">
+  <h2>Task Info</h2>
+  <dl>
+    <dt>Task Name</dt><dd><%= @execution.task_name %></dd>
+    <dt>Status</dt>
+    <dd class="status-<%= @execution.status %>"><%= @execution.status %></dd>
+  </dl>
+</section>
+
+<section class="section">
+  <h2>Arguments</h2>
+  <pre><%= JSON.pretty_generate(@execution.arguments) if @execution.arguments.present? %></pre>
+</section>
+
+<section class="section">
+  <h2>Execution Info</h2>
+  <dl>
+    <dt>Started At</dt><dd><%= @execution.started_at %></dd>
+    <dt>Finished At</dt><dd><%= @execution.finished_at %></dd>
+    <dt>Duration (ms)</dt><dd><%= @execution.duration_ms %></dd>
+  </dl>
+</section>
+
+<% unless @execution.status == "success" %>
+  <section class="section">
+    <h2>Error Info</h2>
+    <dl>
+      <dt>Error Class</dt><dd><%= @execution.error_class %></dd>
+      <dt>Error Message</dt><dd><%= @execution.error_message %></dd>
+    </dl>
+  </section>
+<% end %>
+
+<section class="section">
+  <h2>Environment Info</h2>
+  <dl>
+    <dt>Hostname</dt><dd><%= @execution.hostname %></dd>
+    <dt>PID</dt><dd><%= @execution.pid %></dd>
+    <dt>Ruby Version</dt><dd><%= @execution.ruby_version %></dd>
+    <dt>Rails Env</dt><dd><%= @execution.rails_env %></dd>
+  </dl>
+</section>
