@@ -13,6 +13,7 @@ module RakeAudit
     protect_from_forgery with: :exception
 
     before_action :authenticate!
+    rescue_from RakeAudit::RecordNotFound, with: :record_not_found
 
     private
 
@@ -26,6 +27,27 @@ module RakeAudit
       return unless callable
 
       instance_exec(self, &callable)
+    end
+
+    # Returns the configured adapter. Falls back to a fresh ActiveRecordAdapter
+    # when none is set so existing apps keep working without explicit configuration.
+    #
+    # @return [RakeAudit::Adapters::Base]
+    def web_adapter
+      RakeAudit.config.adapter || default_web_adapter
+    end
+
+    def default_web_adapter
+      require 'rake_audit/adapters/active_record_adapter'
+      RakeAudit.config.logger.warn(
+        '[RakeAudit] config.adapter is nil — falling back to ActiveRecordAdapter. ' \
+        'Set RakeAudit.configure { |c| c.adapter = ... } in your initializer to silence this warning.'
+      )
+      RakeAudit::Adapters::ActiveRecordAdapter.new
+    end
+
+    def record_not_found
+      head :not_found
     end
   end
 end

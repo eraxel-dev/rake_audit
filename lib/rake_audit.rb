@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'rake_audit/version'
+require_relative 'rake_audit/record_not_found'
 require_relative 'rake_audit/configuration'
 require_relative 'rake_audit/task_execution_record'
 require_relative 'rake_audit/builders/task_execution_record_builder'

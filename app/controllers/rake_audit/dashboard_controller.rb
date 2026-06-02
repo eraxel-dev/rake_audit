@@ -1,20 +1,23 @@
 # frozen_string_literal: true
 
 module RakeAudit
-  # Renders the dashboard: six aggregate metrics computed from
-  # {RakeAudit::TaskExecution}, plus the ten task names with the most failures.
+  # Renders the dashboard: six aggregate metrics plus the ten task names with
+  # the most failures. All data access is delegated to +web_adapter+ so the
+  # controller is backend-agnostic (ActiveRecord, Redis, Mongo, …).
   class DashboardController < ApplicationController
-    # Compute the dashboard aggregates in a single pass of small queries and
-    # expose them as instance variables for the view.
+    # Compute the dashboard aggregates and expose them as instance variables.
+    # All five metrics are fetched via a single +web_adapter.stats+ call so
+    # adapters can compute them in one pass (e.g. one Redis LRANGE instead of five).
     #
     # @return [void]
     def index
-      @total = TaskExecution.count
-      @success_count = TaskExecution.where(status: 'success').count
-      @failure_count = TaskExecution.where(status: 'failure').count
-      @failure_rate = failure_rate(@failure_count, @total)
-      @average_duration_ms = TaskExecution.average(:duration_ms)
-      @top_failed_tasks = top_failed_tasks
+      s = web_adapter.stats
+      @total               = s[:total]
+      @success_count       = s[:success_count]
+      @failure_count       = s[:failure_count]
+      @failure_rate        = failure_rate(@failure_count, @total)
+      @average_duration_ms = s[:average_duration_ms]
+      @top_failed_tasks    = s[:top_failed_tasks]
     end
 
     private
@@ -28,19 +31,6 @@ module RakeAudit
       return 0.0 if total.zero?
 
       failures / total.to_f * 100
-    end
-
-    # The ten task names with the most failures, ordered by failure count
-    # descending. Returned as an Array of +[task_name, count]+ pairs.
-    #
-    # @return [Array<Array(String, Integer)>]
-    def top_failed_tasks
-      TaskExecution
-        .where(status: 'failure')
-        .group(:task_name)
-        .count
-        .sort_by { |_task_name, count| -count }
-        .first(10)
     end
   end
 end

@@ -2,54 +2,38 @@
 
 module RakeAudit
   # Lists recorded task executions (with filtering + pagination) and shows the
-  # detail of a single execution.
+  # detail of a single execution. All data access is delegated to +web_adapter+
+  # so the controller is backend-agnostic (ActiveRecord, Redis, Mongo, …).
   class ExecutionsController < ApplicationController
-    # Exact-match filters: request param name => column queried.
-    EXACT_FILTERS = {
-      task_name: :task_name,
-      status: :status,
-      hostname: :hostname,
-      rails_env: :rails_env
-    }.freeze
-
     # Newest-first, filtered, paginated list of executions.
     #
     # @return [void]
     def index
-      scope = TaskExecution.order(started_at: :desc)
-      scope = apply_exact_filters(scope)
-      scope = apply_date_range(scope)
-      @executions = scope.page(params[:page])
+      @executions = web_adapter.query(filters: filter_params, page: params[:page])
     end
 
     # Detail of one execution, looked up by id.
     #
     # @return [void]
     def show
-      @execution = TaskExecution.find(params[:id])
+      @execution = web_adapter.find(params[:id])
     end
 
     private
 
-    # Apply every present exact-match filter from {EXACT_FILTERS} to the scope.
+    # Build a filter hash from request params, omitting any blank values so
+    # adapters can safely check +filters.key?(col)+ without blank-value guards.
     #
-    # @param scope [ActiveRecord::Relation]
-    # @return [ActiveRecord::Relation]
-    def apply_exact_filters(scope)
-      EXACT_FILTERS.reduce(scope) do |relation, (param, column)|
-        value = params[param]
-        value.present? ? relation.where(column => value) : relation
-      end
-    end
-
-    # Apply the inclusive +from+/+to+ +started_at+ bounds when present.
-    #
-    # @param scope [ActiveRecord::Relation]
-    # @return [ActiveRecord::Relation]
-    def apply_date_range(scope)
-      scope = scope.where(started_at: params[:from]..) if params[:from].present?
-      scope = scope.where(started_at: ..params[:to]) if params[:to].present?
-      scope
+    # @return [Hash]
+    def filter_params
+      {
+        task_name: params[:task_name],
+        status: params[:status],
+        hostname: params[:hostname],
+        rails_env: params[:rails_env],
+        from: params[:from],
+        to: params[:to]
+      }.reject { |_, v| v.blank? }
     end
   end
 end

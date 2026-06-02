@@ -8,6 +8,7 @@ require 'spec_helper'
 begin
   require 'rack/test'
   require_relative '../support/web_ui_app'
+  require 'rake_audit/adapters/active_record_adapter'
   WEB_UI_AVAILABLE = true
 rescue LoadError => e
   warn "Web UI specs skipped: #{e.message}"
@@ -17,6 +18,11 @@ end
 RSpec.describe 'RakeAudit Web UI', :active_record, if: WEB_UI_AVAILABLE do
   include Rack::Test::Methods
   include WebUiAppHelpers
+
+  # Wire up the AR adapter so controllers use config.adapter rather than the
+  # fallback, exercising the same code path any configured adapter would use.
+  before { RakeAudit.config.adapter = RakeAudit::Adapters::ActiveRecordAdapter.new }
+  after  { RakeAudit.reset_config! }
 
   describe 'routing (Engine mounted at /rake_audit)' do
     it 'GET /rake_audit routes to executions#index' do
@@ -180,8 +186,6 @@ RSpec.describe 'RakeAudit Web UI', :active_record, if: WEB_UI_AVAILABLE do
   end
 
   describe 'authentication hook' do
-    after { RakeAudit.reset_config! }
-
     it 'is a no-op when authenticate_with is nil (pages public)' do
       RakeAudit.config.authenticate_with = nil
       get '/rake_audit/executions'
