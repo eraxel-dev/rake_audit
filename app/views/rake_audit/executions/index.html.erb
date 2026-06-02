@@ -1,0 +1,74 @@
+<h1>Executions</h1>
+
+<%= form_with url: executions_path, method: :get, class: "filters" do |f| %>
+  <div class="row">
+    <label>
+      Task Name
+      <%= f.text_field :task_name, value: params[:task_name] %>
+    </label>
+    <label>
+      Status
+      <%= f.select :status,
+            options_for_select(
+              [["All", ""], ["Success", "success"], ["Failure", "failure"]],
+              params[:status]
+            ) %>
+    </label>
+    <label>
+      Hostname
+      <%= f.text_field :hostname, value: params[:hostname] %>
+    </label>
+    <label>
+      Rails Env
+      <%= f.text_field :rails_env, value: params[:rails_env] %>
+    </label>
+    <label>
+      From
+      <%= f.date_field :from, value: params[:from] %>
+    </label>
+    <label>
+      To
+      <%= f.date_field :to, value: params[:to] %>
+    </label>
+    <button type="submit">Filter</button>
+  </div>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task Name</th>
+      <th>Status</th>
+      <th>Duration (ms)</th>
+      <th>Started At</th>
+      <th>Hostname</th>
+      <th>Rails Env</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @executions.any? %>
+      <% @executions.each do |execution| %>
+        <tr>
+          <td><%= execution.task_name %></td>
+          <td class="status-<%= execution.status %>"><%= execution.status %></td>
+          <td><%= execution.duration_ms %></td>
+          <td><%= execution.started_at %></td>
+          <td><%= execution.hostname %></td>
+          <td><%= execution.rails_env %></td>
+          <td><%= link_to "View", execution_path(execution) %></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="7">No executions found.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @executions.respond_to?(:current_page) %>
+  <div class="pagination">
+    <%= paginate @executions if respond_to?(:paginate) %>
+  </div>
+<% end %>

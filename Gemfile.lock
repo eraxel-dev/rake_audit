@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     rake_audit (0.1.0)
+      kaminari (>= 1.2, < 2.0)
       rake (>= 13.0, < 14.0)
 
 GEM
@@ -68,6 +69,18 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.19.7)
+    kaminari (1.2.2)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.2)
+      kaminari-activerecord (= 1.2.2)
+      kaminari-core (= 1.2.2)
+    kaminari-actionview (1.2.2)
+      actionview
+      kaminari-core (= 1.2.2)
+    kaminari-activerecord (1.2.2)
+      activerecord
+      kaminari-core (= 1.2.2)
+    kaminari-core (1.2.2)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
@@ -176,7 +189,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionpack (~> 7.0)
+  actionview (~> 7.0)
   activerecord (~> 7.0)
+  rack-test (~> 2.1)
   railties (~> 7.0)
   rake_audit!
   rspec (~> 3.13)
