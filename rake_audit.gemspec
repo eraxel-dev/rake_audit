@@ -19,13 +19,19 @@ Gem::Specification.new do |spec|
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
+  spec.metadata['changelog_uri'] = "#{spec.homepage}/blob/main/CHANGELOG.md"
   spec.metadata['rubygems_mfa_required'] = 'true'
 
-  spec.files = Dir.glob('lib/**/*') +
-               Dir.glob('app/**/*') +
-               Dir.glob('config/**/*.rb') +
-               Dir.glob('db/**/*.rb') +
-               %w[README.md LICENSE]
+  # Only ship runtime files. The globs are scoped to runtime directories so test
+  # files (spec/) and build artifacts (*.gem) never leak; +select(&File.method(:file?))+
+  # drops the directory entries that +Dir.glob+ would otherwise include.
+  spec.files = (
+    Dir.glob('lib/**/*') +
+    Dir.glob('app/**/*') +
+    Dir.glob('config/**/*.rb') +
+    Dir.glob('db/**/*.rb') +
+    %w[README.md LICENSE CHANGELOG.md]
+  ).select { |path| File.file?(path) }
   spec.require_paths = ['lib']
 
   # Pagination for the Web UI execution list: ExecutionsController#index calls
