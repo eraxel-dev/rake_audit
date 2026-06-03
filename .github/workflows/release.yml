@@ -1,0 +1,59 @@
+name: Release
+
+# Publishes the gem to RubyGems.org when a version tag is pushed.
+#
+# Trigger it by pushing a tag that matches the gem version, e.g.:
+#
+#     git tag v0.1.0
+#     git push origin v0.1.0
+#
+# ---------------------------------------------------------------------------
+# Required secret: RUBYGEMS_API_KEY
+# ---------------------------------------------------------------------------
+# 1. Sign in to https://rubygems.org with the eraxel.dev@gmail.com account
+#    (MFA must be enabled on the account for `rubygems_mfa_required` gems).
+# 2. Go to Account Settings -> API Keys -> "New API key".
+#    Grant it the "Push rubygem" scope (scope it to the `rake_audit` gem once
+#    the gem exists). Copy the generated key.
+# 3. In this GitHub repo: Settings -> Secrets and variables -> Actions ->
+#    "New repository secret". Name it RUBYGEMS_API_KEY and paste the key.
+#
+# The `gem push` step reads the key from the GEM_HOST_API_KEY environment
+# variable, which the RubyGems CLI uses to authenticate non-interactively
+# (no OTP prompt needed when pushing with a scoped API key).
+# ---------------------------------------------------------------------------
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-gem
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and push gem
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+
+      - name: Build gem
+        run: gem build rake_audit.gemspec
+
+      - name: Push gem to RubyGems.org
+        env:
+          GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+        run: gem push rake_audit-*.gem
