@@ -53,6 +53,18 @@ RSpec.describe RakeAudit::ExecutionRecorder do
       expect(adapter.saved.first.status).to eq('failure')
       expect(adapter.saved.first.error_class).to eq('NoMemoryError')
     end
+
+    it 'times the block and records the elapsed duration in milliseconds' do
+      # Drive the recorder's clock so the assertion is deterministic: the timer
+      # reads Time.now twice (start, finish); 0.5s apart -> 500ms.
+      start  = Time.at(1_000)
+      finish = Time.at(1_000.5)
+      allow_any_instance_of(described_class).to receive(:now).and_return(start, finish)
+
+      recorder.record { :ok }
+
+      expect(adapter.saved.first.duration_ms).to eq(500)
+    end
   end
 
   describe 'no-op when adapter is nil' do
