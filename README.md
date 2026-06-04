@@ -20,6 +20,7 @@ Gain a complete historical record of your operational tasks without touching you
 - [Web UI](#web-ui)
 - [Custom Adapter](#custom-adapter)
 - [Example Usages](#example-usages)
+- [Try the Example App](#try-the-example-app)
 
 ---
 
@@ -233,3 +234,24 @@ RakeAudit.configure do |config|
   config.web_ui_enabled = false
 end
 ```
+
+---
+
+## Try the Example App
+
+A complete, runnable Rails 7 example lives in
+[`examples/dummy_app/`](examples/dummy_app/). It wires `rake_audit` into a real
+app via a local path gem (`gem 'rake_audit', path: '../..'`), uses SQLite, and
+ships five demo Rake tasks plus the mounted Web UI.
+
+```sh
+cd examples/dummy_app
+bundle install
+bin/rails db:setup
+bin/rails demo:hello        # records a success
+bin/rails demo:flaky        # records a failure
+bin/rails server            # then open http://localhost:3000/rake_audit
+```
+
+See [`examples/dummy_app/README.md`](examples/dummy_app/README.md) for the full
+walkthrough. (The example is not included in the published gem.)

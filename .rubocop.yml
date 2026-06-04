@@ -5,6 +5,10 @@ AllCops:
   Exclude:
     # Generator templates contain ERB and are not parseable as plain Ruby.
     - "lib/generators/**/templates/**/*"
+    # The example Rails app is a standalone demonstration with its own Gemfile
+    # and generated files (db/schema.rb, bin/* stubs). It is not part of the
+    # gem's library code and is not held to the gem's lint rules.
+    - "examples/**/*"
 
 # Specs are intentionally verbose and example-driven.
 Metrics/BlockLength:
