@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-06-04
+
+### Added
+
+- Example Rails app in `examples/dummy_app/` demonstrating full setup with SQLite and five demo Rake tasks.
+
 ## [0.1.0] - 2026-06-03
 
 Initial public release.
@@ -34,5 +40,6 @@ Initial public release.
 - **Rails-free operation** — the gem loads and records outside Rails; Kaminari's
   ActiveRecord/ActionView integrations stay inert until those libraries are present.
 
-[Unreleased]: https://github.com/eraxel-dev/rake_audit/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/eraxel-dev/rake_audit/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/eraxel-dev/rake_audit/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/eraxel-dev/rake_audit/releases/tag/v0.1.0
