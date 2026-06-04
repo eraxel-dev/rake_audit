@@ -23,10 +23,10 @@ name: Release
 # (no OTP prompt needed when pushing with a scoped API key).
 # ---------------------------------------------------------------------------
 
-on:
-  push:
-    tags:
-      - 'v*'
+# on:
+#   push:
+#     tags:
+#       - 'v*'
 
 permissions:
   contents: read
