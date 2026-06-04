@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+# Pin Rails to the 7.x line the gem is developed and tested against.
+gem 'rails', '~> 7.0'
+
+# SQLite is the only database backend used by this example. The version
+# constraint mirrors rake_audit's own development dependency.
+gem 'sqlite3', '~> 1.4'
+
+# Use rake_audit straight from the local checkout (two levels up:
+# examples/dummy_app -> examples -> repo root) so the example always exercises
+# the current gem source rather than a published release.
+gem 'rake_audit', path: '../..'
+
+# Puma is Rails' default app server; only needed to boot the Web UI locally.
+gem 'puma', '>= 5.0'

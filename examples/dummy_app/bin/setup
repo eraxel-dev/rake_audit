@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'fileutils'
+
+# Run from the example app's root regardless of where setup is invoked.
+APP_ROOT = File.expand_path('..', __dir__)
+
+def system!(*args)
+  system(*args, exception: true)
+end
+
+FileUtils.chdir(APP_ROOT) do
+  puts "== Installing dependencies =="
+  system! 'gem install bundler --conservative'
+  system('bundle check') || system!('bundle install')
+
+  puts "\n== Preparing database =="
+  system! 'bin/rails db:setup'
+
+  puts "\n== Done! Try the demo tasks, e.g.: bin/rails demo:hello =="
+end
